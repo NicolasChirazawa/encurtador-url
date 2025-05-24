@@ -1,0 +1,138 @@
+* {
+    font-family: "quicksand", sans-serif; ;
+}
+
+body {
+    display: inline;
+    background-color: rgb(246, 246, 246);
+
+    max-width: 1000px;
+
+    margin: 0 auto 0 auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 40px;
+
+    margin-top: 50px;
+}
+
+section.principal {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    max-width: 600px;
+
+    border: 1px solid rgba(98, 98, 98, 0.228);
+    border-radius: 15px;
+
+    padding: 20px;
+    margin: 0 auto;
+}
+
+section > h2 {
+    font-size: 26px;
+    text-align: center;
+
+    color: rgb(98, 98, 98);
+
+    margin: 0 0 20px 0;
+}
+
+div.auxiliar {
+    display: table;
+
+    border: 2px solid rgb(98, 98, 98);
+    border-radius: 5px 0 0 5px;
+}
+
+input#texto {
+    width: 400px;
+    font-size: 15px;
+
+    display: table-cell;
+
+    padding: 10px 0 10px 10px;
+    border: 0;
+    margin: 0px;
+}
+
+input:focus {
+    box-shadow: 0 0 0 0;
+    outline: 0;
+}
+
+input#botao {
+    display: table-cell;
+    height: 45px;
+
+    background-color: rgb(98, 98, 98);
+    color: white;
+    font-weight: 900;
+
+    border: 0;
+    margin: 0px;
+}
+
+section > p {
+    color: rgb(98, 98, 98);
+
+    margin: 20px 0 0 0 ;
+}
+
+div#vantagens {
+    background-color: rgb(98, 98, 98);
+
+    display: flex;
+    justify-content: center;
+
+    margin: 40px 0;
+}
+
+div#vantagens > div {
+    text-align: center;
+   
+    max-width: 200px;
+
+    margin: 0 20px;
+}
+
+div#vantagens > div > img {
+    filter: invert(100%);
+    width: 50px;
+
+    margin-top: 20px;
+}
+
+h3 {
+    font-size: 26px;
+    color: white;
+
+    margin: 15px 0 10px 0;
+}
+
+div#vantagens > div > p {
+    color: white;
+}
+
+section.explicacao {
+    margin-bottom: 40px;
+}
+
+h2.titulo-auxiliar {
+    margin-bottom: 10px;
+}
+
+p.paragrafo-auxiliar {
+    line-height: 20px;
+
+    margin-top: 10px;
+}
+
+span.negrito {
+    font-weight: bold;
+}
