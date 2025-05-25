@@ -3,6 +3,6 @@
     "express": "^5.1.0",
     "pg-promise": "^11.13.0"
   }, "scripts": {
-    "start": "cd ./estrutura && node backend.js"
+    "start": "cd ./estrutura/backend & node --env-file=../../.env app.js "
   }
 }
