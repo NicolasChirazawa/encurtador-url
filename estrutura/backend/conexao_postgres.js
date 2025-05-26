@@ -1,5 +1,5 @@
 // Configuração pg-express
-const pgp = require('pg-promise')();
+const pg = require('pg-promise')({});
 const databaseConfig = {
     host: process.env.HOST,
     port: process.env.POSTGRES_PORT,
@@ -8,6 +8,6 @@ const databaseConfig = {
     password: process.env.PASSWORD
 }
 
-const db = pgp(databaseConfig);
+const db = pg(databaseConfig);
 
 module.exports = { db }
