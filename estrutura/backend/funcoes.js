@@ -19,4 +19,18 @@ function gerarURLs() {
     return url_curta;
 }
 
-module.exports = { testarConexao, gerarURLs }
+function gerarDiaAtual() {
+    const data_agora = new Date;
+
+    let dia = String(data_agora.getDate());
+    let mes = String(data_agora.getMonth() + 1);
+    const ano = data_agora.getFullYear();
+
+    if(dia.length < 2) { dia = '0' + dia }
+    if(mes.length < 2) { mes = '0' + mes } 
+
+    data_agora_formatada = ano + '-' + mes + '-' + dia
+    return data_agora_formatada;
+}
+
+module.exports = { testarConexao, gerarURLs, gerarDiaAtual }
