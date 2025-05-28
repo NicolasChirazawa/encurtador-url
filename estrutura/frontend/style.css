@@ -84,6 +84,46 @@ section > p {
     margin: 20px 0 0 0 ;
 }
 
+div#sucesso {
+    background-color: rgba(0, 255, 0, 0.375);
+
+    text-align: center;
+
+    padding: 10px;
+    border: 2px solid rgba(0, 128, 0, 0.431);
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+div#fracasso {
+    background-color: rgba(255, 0, 0, 0.375);
+
+    text-align: center;
+
+    padding: 10px;
+    border: 2px solid rgba(128, 0, 0, 0.431);
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+#desabilitado {
+    cursor: none;
+
+    height: 45px;
+}
+
+section > div > p {
+    font-size: 15px;
+
+    margin-top: 4px;
+}
+
+section > div > a {
+    font-size: 18px;
+
+    text-decoration: underline;
+}
+
 div#vantagens {
     background-color: rgb(98, 98, 98);
 
