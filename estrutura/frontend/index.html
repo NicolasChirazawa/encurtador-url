@@ -14,9 +14,21 @@
     <h1>Encurtador de links</h1>
     <section class="principal">
         <h2>Abaixo sua URL...</h2>
-        <div class="auxiliar">
-            <input type="text" name="" id="texto" placeholder="Cole sua URL aqui">
-            <input type="button" value="Gerar URL" id="botao" onclick=gerarURL()>
+        <div>
+            <div>
+                <button id="fix" class="ativo" onclick=ativacaoEsquerda()>Padrão</button><button id="fix_2" onclick=ativacaoDireita()>Customizado</button>
+            </div>
+
+            <div class="auxiliar">
+                <input type="text" name="" id="texto" placeholder="Cole sua URL aqui">
+                <input type="button" value="Gerar URL" id="botao" onclick=gerarURL()>
+            </div>
+
+            <div id="wrapper" class="desativado_1">
+                <span id="texto_url" class="desativado_2">http://localhost:3000/api/path/</span>
+                <input type="text" name="" id="personalizada" class="desativado_3" readonly="readonly">
+            </div>
+            <p id="aviso">É apenas aceito escrever de 'a' a 'z' (sem acento), '0' a '9' e '-' e '_'.</p>
         </div>
         <p>Uma forma <span class="negrito">fácil</span> de compartilhar links!</p>
     </section>

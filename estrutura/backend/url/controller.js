@@ -2,7 +2,7 @@ const bd = require('../conexao_postgres.js').db;
 const estrutura_URL = require('./model').estrutura_URL;
 
 const novaURL = (async function(req, res) {
-    const { url_original } = req.body;
+    const { url_original, url_customizada } = req.body;
 
     // Verificar como inserir CORS através do res.setHeader(https://www.geeksforgeeks.org/how-to-set-response-header-on-express-js-assets/)
 
@@ -13,22 +13,38 @@ const novaURL = (async function(req, res) {
 
     if(buscaURLoriginalRepetida !== null) { 
         const urlRepetida = new estrutura_URL(buscaURLoriginalRepetida.url_original, buscaURLoriginalRepetida.url_referencia, 'Repetida');
+
         return res.status(400).send(urlRepetida);
     }
 
-    const gerarURL = require('../funcoes').gerarURLs;
     let urlReferencia;
 
-    let testeURLrepetida = true;
-    while(testeURLrepetida) {
-        urlReferencia = gerarURL();
+    if(url_customizada === undefined) {
+        const gerarURL = require('../funcoes').gerarURLs;
 
-        const buscarBancoURLreferencia = await bd.oneOrNone({
-        text: 'SELECT url_referencia FROM url WHERE url_referencia = $1',
-        values: urlReferencia
+        let testeURLrepetida = true;
+        while(testeURLrepetida) {
+            urlReferencia = gerarURL();
+
+            const buscarBancoURLreferencia = await bd.oneOrNone({
+            text: 'SELECT url_referencia FROM url WHERE url_referencia = $1',
+            values: urlReferencia
+            });
+
+            if(buscarBancoURLreferencia === null) { testeURLrepetida = false }
+        }
+    } else if (url_customizada !== undefined) {
+        const buscaURLcustomizadaRepetida = await bd.oneOrNone({
+            text: 'SELECT url_original, url_referencia FROM url WHERE url_referencia = $1',
+            values: url_customizada
         });
 
-        if(buscarBancoURLreferencia === null) { testeURLrepetida = false }
+        if(buscaURLcustomizadaRepetida !== null) {
+            const urlPersonalizaRepetida = new estrutura_URL(buscaURLcustomizadaRepetida.url_original, buscaURLcustomizadaRepetida.url_referencia, 'Repetida');
+            return res.status(400).send(urlPersonalizaRepetida);
+        }
+
+        urlReferencia = url_customizada;
     }
 
     const gerarDateHoje = require('../funcoes.js').gerarDiaAtual;

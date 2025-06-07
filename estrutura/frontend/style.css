@@ -40,7 +40,28 @@ section > h2 {
 
     color: rgb(98, 98, 98);
 
-    margin: 0 0 20px 0;
+    margin: 0 0 30px 0;
+}
+
+div > button {
+    font-weight: bold;
+    
+    background-color: white;
+    color: rgb(98, 98, 98);
+    
+    border: 2px solid rgb(98, 98, 98);
+    border-bottom: 0;
+    border-radius: 1px 1px 0 0;
+} 
+
+button#fix {
+    border-right: 1px;
+    margin-left: 5px;
+}
+
+.ativo {
+    background-color: rgb(98, 98, 98);
+    color: white;
 }
 
 div.auxiliar {
@@ -61,6 +82,37 @@ input#texto {
     margin: 0px;
 }
 
+div#wrapper {    
+    width: 335px;
+
+    border: 2px solid rgb(98, 98, 98);
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+div#wrapper > span {
+    font-size: 12px;
+    color: rgb(98, 98, 98);
+
+    padding: 10px 0 10px 10px;
+    margin-right: 10px;
+}
+
+div#wrapper > input#personalizada {
+    font-size: 12px;
+
+    padding: 10px 0 10px 0px;
+    border: 0;
+}
+
+.desativado_1 {
+    border: 2px solid rgb(230, 230, 230) !important;
+}
+
+.desativado_2 {
+    color: rgb(230, 230, 230) !important;
+}
+
 input:focus {
     box-shadow: 0 0 0 0;
     outline: 0;
@@ -78,10 +130,15 @@ input#botao {
     margin: 0px;
 }
 
+p#aviso {
+    font-size: 10px;
+    margin-left: 8px;
+}
+
 section > p {
     color: rgb(98, 98, 98);
 
-    margin: 20px 0 0 0 ;
+    margin: 15px 0 0 0 ;
 }
 
 div#sucesso {
