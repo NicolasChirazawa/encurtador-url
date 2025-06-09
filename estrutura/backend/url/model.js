@@ -6,4 +6,12 @@ class estrutura_URL {
     }
 }
 
-module.exports = { estrutura_URL }
+class estrutura_URL_fracasso {
+    constructor(status, mensagem, valida) {
+        this.status = status;
+        this.mensagem = mensagem;
+        this.valida = valida;
+    }
+}
+
+module.exports = { estrutura_URL, estrutura_URL_fracasso }

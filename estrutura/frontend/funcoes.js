@@ -52,11 +52,12 @@ async function gerarURL() {
     let teste_condicoes;
     
     const url_original = document.getElementById("texto").value;
-    const url_customizada = document.getElementById('personalizada').value;
+    const url_customizado = document.getElementById('personalizada').value;
 
     // Teste validar URLs
+    
     if(customizado_status === true) {
-        teste_condicoes = eURLValida(url_original, url_customizada);
+        teste_condicoes = eURLValida(url_original, url_customizado);
     } else if (customizado_status === false) {
         teste_condicoes = eURLValida(url_original);
     }
@@ -64,11 +65,11 @@ async function gerarURL() {
     if(teste_condicoes.valida === false) {
         criarAba(teste_condicoes);
     } else if (teste_condicoes.valida === true) {
-        
         let url_gerada;
+        customizado_status = false;
 
         if(customizado_status === true) {
-            url_gerada = await criarURLCurta(url_original, url_customizada)
+            url_gerada = await criarURLCurta(url_original, url_customizado)
         } else if (customizado_status === false) {
             url_gerada = await criarURLCurta(url_original);
         }
@@ -79,7 +80,6 @@ async function gerarURL() {
 
      liberarBotao();
 }
-
 
 function removerAba() {
     let aba_1 = document.getElementById('sucesso');
@@ -135,7 +135,7 @@ function liberarBotao() {
     botao.setAttribute('id', 'botao');
 }
 
-function eURLValida(url_link, url_customizada) {
+function eURLValida(url_link, url_customizado) {
 
     if(url_link === '') {
         return {
@@ -147,7 +147,7 @@ function eURLValida(url_link, url_customizada) {
 
     if(customizado_status == true) {
         
-        if(url_customizada === '') {
+        if(url_customizado === '') {
             return {
                 status: 'Erro',
                 mensagem: 'Insira a URL personalizada',
@@ -155,7 +155,7 @@ function eURLValida(url_link, url_customizada) {
             }
         }
 
-        if(url_customizada.length > 14) {
+        if(url_customizado.length > 14) {
             return {
                 status: 'Erro',
                 mensagem: 'O tamanho limite da URL é 14',
@@ -163,8 +163,8 @@ function eURLValida(url_link, url_customizada) {
             }
         }
 
-        for(let i = 0; i < url_customizada.length; i++) {
-            let caractere_codigo = url_customizada[i].charCodeAt(0);
+        for(let i = 0; i < url_customizado.length; i++) {
+            let caractere_codigo = url_customizado[i].charCodeAt(0);
 
             if(!(caractere_codigo == 45 || 
                 (caractere_codigo >= 48 && caractere_codigo <= 57) || 
@@ -183,12 +183,12 @@ function eURLValida(url_link, url_customizada) {
     return { valida: true };
 }
 
-async function criarURLCurta(url_link, url_customizada) {
+async function criarURLCurta(url_link, url_customizado) {
     try {
         let request = await fetch('http://localhost:3000/api/criarURL', {
             body: JSON.stringify({ 
                 url_original: url_link,
-                url_customizada: url_customizada
+                url_customizado: url_customizado
              }),
             method: 'POST',
             headers: {
