@@ -48,91 +48,28 @@ function ativacaoDireita() {
 async function gerarURL() {
     removerAba();
     bloquearBotao();
-
-    let teste_condicoes;
     
     const url_original = document.getElementById("texto").value;
-    const url_customizado = document.getElementById('personalizada').value;
-
-    // Teste validar URLs
+    let url_customizado = document.getElementById('personalizada').value;
     
-    if(customizado_status === true) {
-        teste_condicoes = eURLValida(url_original, url_customizado);
-    } else if (customizado_status === false) {
-        teste_condicoes = eURLValida(url_original);
-    }
+    if(url_customizado == '') { url_customizado = undefined }
 
-    if(teste_condicoes.valida === false) {
+    const teste_condicoes = eURLValida(url_original, url_customizado);
+
+    if(teste_condicoes.status === 'Erro') {
         criarAba(teste_condicoes);
-    } else if (teste_condicoes.valida === true) {
-        let url_gerada;
-        customizado_status = false;
+        liberarBotao();
+        return;
+    }
 
-        if(customizado_status === true) {
-            url_gerada = await criarURLCurta(url_original, url_customizado)
-        } else if (customizado_status === false) {
-            url_gerada = await criarURLCurta(url_original);
-        }
-
+    let url_gerada = await criarURLCurta(url_original, url_customizado);
+    if(url_gerada.status != 'Erro') {
         url_gerada = await url_gerada.json();
-        criarAba(url_gerada);
-     }
-
-     liberarBotao();
-}
-
-function removerAba() {
-    let aba_1 = document.getElementById('sucesso');
-    let aba_2 = document.getElementById('fracasso');
-
-    if(aba_1 !== null) { aba_1.remove() }
-    if(aba_2 !== null) { aba_2.remove() }
-}
-
-function criarAba(resposta) {
-    let elemento_pai = document.querySelector('section.principal')
+    }
     
-    let aba = document.createElement('div');
-    let conteudo = document.createElement('p');
-    let link = document.createElement('a');
-
-    elemento_pai.appendChild(aba);
-
-    if(resposta.status === 'Erro') {
-        aba.setAttribute('id', 'fracasso');
-        conteudo.innerText = 'Ocorreu um erro durante a requisição';
-        link.innerText = resposta.mensagem;
-    }
-
-    if(resposta.status === 'Novo') {
-        aba.setAttribute('id', 'sucesso');
-        conteudo.innerText = 'Foi criado a URL encurtada, segue o link abaixo:';
-        
-        link.innerText = `http://localhost:3000/api/path/${resposta.url_referencia}`;
-    }
-
-    if(resposta.status === 'Repetida') {
-        aba.setAttribute('id', 'fracasso');
-        conteudo.innerText = 'Já existe uma URL com o link colado:';
-
-        link.innerText = `http://localhost:3000/api/path/${resposta.url_referencia}`;
-    }
-
-    aba.appendChild(conteudo);
-    aba.appendChild(link);
-}
-
-function bloquearBotao() {
-   let botao = document.getElementById('botao');
-   botao.disabled = true;
-   botao.setAttribute('id', 'desabilitado');
-}
-
-function liberarBotao() {
-    let botao = document.getElementById('desabilitado');
-
-    botao.removeAttribute('disabled');
-    botao.setAttribute('id', 'botao');
+    criarAba(url_gerada);
+    liberarBotao();
+    return;
 }
 
 function eURLValida(url_link, url_customizado) {
@@ -140,26 +77,23 @@ function eURLValida(url_link, url_customizado) {
     if(url_link === '') {
         return {
             status: 'Erro',
-            mensagem: 'Insira uma URL',
-            valida: false
+            mensagem: 'Insira uma URL'
         }
     }
 
-    if(customizado_status == true) {
+    if(url_customizado !== undefined) {
         
         if(url_customizado === '') {
             return {
                 status: 'Erro',
-                mensagem: 'Insira a URL personalizada',
-                valida: false
+                mensagem: 'Insira a URL personalizada'
             }
         }
 
         if(url_customizado.length > 14) {
             return {
                 status: 'Erro',
-                mensagem: 'O tamanho limite da URL é 14',
-                valida: false
+                mensagem: 'O tamanho limite da URL é 14'
             }
         }
 
@@ -173,14 +107,49 @@ function eURLValida(url_link, url_customizado) {
                 (caractere_codigo >= 97 && caractere_codigo <= 122))) {
                 return {
                     status: 'Erro',
-                    mensagem: 'Caractere inválido',
-                    valida: false
+                    mensagem: 'Caractere inválido'
                 }
             }
         }
     }
 
-    return { valida: true };
+    return {
+        status: 'Válido'
+    }
+}
+
+function criarAba(resposta) {
+    let elemento_pai = document.querySelector('section.principal')
+    
+    let aba = document.createElement('div');
+    let conteudo = document.createElement('p');
+    let link = document.createElement('a');
+
+    elemento_pai.appendChild(aba);
+
+    switch (resposta.status) {
+        case 'Erro':
+            aba.setAttribute('id', 'fracasso');
+            conteudo.innerText = 'Ocorreu um erro durante a requisição';
+            link.innerText = resposta.mensagem;
+        break;
+
+        case 'Novo':
+            aba.setAttribute('id', 'sucesso');
+            conteudo.innerText = 'Foi criado a URL encurtada, segue o link abaixo:';
+            link.innerText = resposta.mensagem;
+        break;
+
+        case 'Repetida':
+            aba.setAttribute('id', 'fracasso');
+            conteudo.innerText = 'Já existe uma URL com o link colado:';
+            link.innerText = resposta.mensagem;
+        break;
+    }
+
+    aba.appendChild(conteudo);
+    aba.appendChild(link);
+    return;
 }
 
 async function criarURLCurta(url_link, url_customizado) {
@@ -204,6 +173,27 @@ async function criarURLCurta(url_link, url_customizado) {
         return { 
             status: 'Erro',
             mensagem: 'Tempo limite do request'
-        };
+        }
     }
+}
+
+function removerAba() {
+    let aba_1 = document.getElementById('sucesso');
+    let aba_2 = document.getElementById('fracasso');
+
+    if(aba_1 !== null) { aba_1.remove() }
+    if(aba_2 !== null) { aba_2.remove() }
+}
+
+function bloquearBotao() {
+   let botao = document.getElementById('botao');
+   botao.disabled = true;
+   botao.setAttribute('id', 'desabilitado');
+}
+
+function liberarBotao() {
+    let botao = document.getElementById('desabilitado');
+
+    botao.removeAttribute('disabled');
+    botao.setAttribute('id', 'botao');
 }

@@ -1,11 +1,11 @@
-const estrutura_URL = require('../model').estrutura_URL_fracasso;
+const estrutura_URL = require('../model').estrutura_URL;
 
 const verificacao_url = (async function (req, res, next) {
-    const { url_original, url_customizado } = req.body;
+    let { url_original, url_customizado = undefined } = req.body;
 
     if(url_original === '') {
 
-        let url_invalida = new estrutura_URL('Erro', 'Insira uma URL', false);
+        let url_invalida = new estrutura_URL('', '', 'Erro', 'Insira uma URL');
         
         return res.status(400).send(url_invalida);
     }
@@ -14,13 +14,13 @@ const verificacao_url = (async function (req, res, next) {
         
         if(url_customizado === '') {
             
-            let url_invalida = new estrutura_URL('Erro', 'Insira a URL personalizada', false);
+            let url_invalida = new estrutura_URL('', '', 'Erro', 'Insira a URL personalizada');
         
             return res.status(400).send(url_invalida);
         }
 
         if(url_customizado.length > 14) {
-            let url_invalida = new estrutura_URL('Erro', 'O tamanho limite da URL é 14', false);
+            let url_invalida = new estrutura_URL('', '', 'Erro', 'O tamanho limite da URL é 14');
         
             return res.status(400).send(url_invalida);
         }
@@ -34,7 +34,7 @@ const verificacao_url = (async function (req, res, next) {
                 (caractere_codigo == 95) ||
                 (caractere_codigo >= 97 && caractere_codigo <= 122))) {
                 
-                let url_invalida = new estrutura_URL('Erro', 'Caractere inválido', false);
+                let url_invalida = new estrutura_URL('', '', 'Erro', 'Caractere inválido');
 
                 return res.status(400).send(url_invalida);
             }

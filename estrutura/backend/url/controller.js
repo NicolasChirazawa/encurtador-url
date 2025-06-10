@@ -2,7 +2,7 @@ const bd = require('../conexao_postgres.js').db;
 const estrutura_URL = require('./model').estrutura_URL;
 
 const novaURL = (async function(req, res) {
-    const { url_original, url_customizada } = req.body;
+    let { url_original, url_customizado = undefined } = req.body;
 
     // Verificar como inserir CORS através do res.setHeader(https://www.geeksforgeeks.org/how-to-set-response-header-on-express-js-assets/)
 
@@ -12,39 +12,40 @@ const novaURL = (async function(req, res) {
     });
 
     if(buscaURLoriginalRepetida !== null) { 
-        const urlRepetida = new estrutura_URL(buscaURLoriginalRepetida.url_original, buscaURLoriginalRepetida.url_referencia, 'Repetida');
+        const urlRepetida = new estrutura_URL(buscaURLoriginalRepetida.url_original, buscaURLoriginalRepetida.url_referencia, 'Repetida', `http://localhost:3000/api/path/${buscaURLoriginalRepetida.url_referencia}`);
 
         return res.status(400).send(urlRepetida);
     }
 
     let urlReferencia;
 
-    if(url_customizada === undefined) {
+    if(url_customizado === undefined) {
         const gerarURL = require('../funcoes').gerarURLs;
 
         let testeURLrepetida = true;
+
         while(testeURLrepetida) {
             urlReferencia = gerarURL();
 
             const buscarBancoURLreferencia = await bd.oneOrNone({
-            text: 'SELECT url_referencia FROM url WHERE url_referencia = $1',
-            values: urlReferencia
+                text: 'SELECT url_referencia FROM url WHERE url_referencia = $1',
+                values: urlReferencia
             });
 
             if(buscarBancoURLreferencia === null) { testeURLrepetida = false }
         }
-    } else if (url_customizada !== undefined) {
+    } else if (url_customizado !== undefined) {
         const buscaURLcustomizadaRepetida = await bd.oneOrNone({
             text: 'SELECT url_original, url_referencia FROM url WHERE url_referencia = $1',
-            values: url_customizada
+            values: url_customizado
         });
 
         if(buscaURLcustomizadaRepetida !== null) {
-            const urlPersonalizaRepetida = new estrutura_URL(buscaURLcustomizadaRepetida.url_original, buscaURLcustomizadaRepetida.url_referencia, 'Repetida');
+            const urlPersonalizaRepetida = new estrutura_URL(buscaURLcustomizadaRepetida.url_original, buscaURLcustomizadaRepetida.url_referencia, 'Erro', 'Essa URL personalizada já está sendo usada.');
             return res.status(400).send(urlPersonalizaRepetida);
         }
 
-        urlReferencia = url_customizada;
+        urlReferencia = url_customizado;
     }
 
     const gerarDateHoje = require('../funcoes.js').gerarDiaAtual;
@@ -55,7 +56,7 @@ const novaURL = (async function(req, res) {
         values: [url_original, urlReferencia, data_hoje]
     })
 
-    let estruturaNovaURL = new estrutura_URL(bancoInserirURLreferencia.url_original, bancoInserirURLreferencia.url_referencia, 'Novo');
+    let estruturaNovaURL = new estrutura_URL(bancoInserirURLreferencia.url_original, bancoInserirURLreferencia.url_referencia, 'Novo', `http://localhost:3000/api/path/${bancoInserirURLreferencia.url_referencia}`);
     
     return res.status(201).send(estruturaNovaURL);
 });
