@@ -68,8 +68,7 @@ const redirecionamentoURL = (async function (req, res) {
     });
 
     if(await procurarURLoriginal === null) { 
-        console.log(procurarURLoriginal)
-        return res.status(404).send();
+        return res.status(301).redirect('http://127.0.0.1:5500/estrutura/frontend/404.html');
     }
 
     return res.status(301).redirect(procurarURLoriginal.url_original);
